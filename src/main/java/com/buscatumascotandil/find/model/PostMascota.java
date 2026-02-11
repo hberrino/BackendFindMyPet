@@ -44,7 +44,6 @@ public class PostMascota {
 
     private Boolean activo = true;
 
-    // recompensa opcional
     private BigDecimal montoRecompensa;
 
     @Embedded

@@ -50,20 +50,18 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints públicos (sin login requerido)
-                        .requestMatchers("/posts").permitAll() // POST /posts (crear) y GET /posts (listar publicados)
-                        .requestMatchers("/posts/{id}").permitAll() // GET /posts/{id} (ver detalles)
-                        .requestMatchers("/uploads/**").permitAll() // Imágenes
-                        .requestMatchers("/h2-console/**").permitAll() // H2 Console
-                        // Endpoints de admin (requieren autenticación como ADMIN)
+                        .requestMatchers("/posts").permitAll()
+                        .requestMatchers("/posts/{id}").permitAll()
+                        .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/posts/pendientes").hasRole("ADMIN")
                         .requestMatchers("/posts/{id}/aprobar").hasRole("ADMIN")
                         .requestMatchers("/posts/{id}/rechazar").hasRole("ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().denyAll() // Todo lo demás denegado
+                        .anyRequest().denyAll()
                 )
-                .httpBasic(httpBasic -> {}) // Solo para endpoints de admin
-                .headers(headers -> headers.frameOptions(frame -> frame.disable())); // Para H2 console
+                .httpBasic(httpBasic -> {})
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
     }

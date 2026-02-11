@@ -83,7 +83,6 @@ public class PostMascotaService {
         PostMascota post = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Post no encontrado con id: " + id));
         
-        // Incrementar vistas solo si está publicado
         if (post.getEstado() == EstadoPublicacion.PUBLICADO && post.getActivo()) {
             post.setVistas((post.getVistas() == null ? 0 : post.getVistas()) + 1);
             repository.save(post);
@@ -97,14 +96,12 @@ public class PostMascotaService {
             throw new RuntimeException("La imagen es obligatoria");
         }
 
-        // Validar tipo de archivo
         String contentType = file.getContentType();
         if (contentType == null || !contentType.startsWith("image/")) {
             throw new RuntimeException("El archivo debe ser una imagen válida");
         }
 
-        // Validar tamaño (máximo 5MB)
-        long maxSize = 5 * 1024 * 1024; // 5MB
+        long maxSize = 5 * 1024 * 1024;
         if (file.getSize() > maxSize) {
             throw new RuntimeException("La imagen no puede superar los 5MB");
         }
@@ -115,14 +112,12 @@ public class PostMascotaService {
                 throw new RuntimeException("El nombre del archivo no es válido");
             }
 
-            // Obtener extensión
             String extension = "";
             int lastDot = nombreOriginal.lastIndexOf('.');
             if (lastDot > 0) {
                 extension = nombreOriginal.substring(lastDot);
             }
 
-            // Generar nombre único
             String nombreArchivo = System.currentTimeMillis() + "_" + 
                     nombreOriginal.replaceAll("[^a-zA-Z0-9._-]", "_") + extension;
 

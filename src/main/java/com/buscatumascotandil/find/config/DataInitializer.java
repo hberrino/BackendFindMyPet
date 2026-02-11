@@ -27,13 +27,11 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // Solo crear admin si está habilitado y no existe
         if (createAdminOnStartup && !usuarioRepository.existsByUsername(adminUsername)) {
-            // Si no se proporciona password, usar uno por defecto solo en desarrollo
             String password = adminPassword;
             if (password == null || password.isEmpty()) {
-                password = "admin123"; // Solo para desarrollo
-                System.out.println("⚠️  ADVERTENCIA: Usando password por defecto. Configura app.admin.password en producción!");
+                password = "admin123";
+                System.out.println("ADVERTENCIA: Usando password por defecto. Configura app.admin.password en producción!");
             }
 
             Usuario admin = new Usuario();
@@ -43,11 +41,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setActivo(true);
             usuarioRepository.save(admin);
             
-            System.out.println("========================================");
-            System.out.println("Usuario ADMIN creado:");
-            System.out.println("Username: " + adminUsername);
-            if (adminPassword == null || adminPassword.isEmpty()) {
-                System.out.println("Password: admin123 (CAMBIAR EN PRODUCCIÓN)");
+            
             } else {
                 System.out.println("Password: [configurado desde variables de entorno]");
             }
